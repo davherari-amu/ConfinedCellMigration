@@ -1,0 +1,49 @@
+{
+    "time": {
+        "Ttot": 5.0,
+        "dt": 0.0001,
+        "print_each": 500,
+        "print_each_report": 5
+    },
+    "cell": {
+        "mesh": {
+            "radius": 1.0,
+            "lc": 0.02,
+            "meshOrder": 2,
+            "function": "MakeCircle"
+        },
+        "material": {
+            "bendingTensionRatio": 1e-06,
+            "area_stiffness": 32.0,
+            "peri_stiffness": 10.0,
+            "peri_max_factor": 1.25
+        },
+        "protrusions": {
+            "dynamics": "RandomFilopodiaDynamics",
+            "force_class": "ea_Dotpro",
+            "prot_freq": 2,
+            "prot_tim_min": 1.0,
+            "prot_mag_min": 8.0,
+            "prot_wid_min": 1.0,
+            "prot_theta_pi_min": 0.0,
+            "prot_theta_pi_max": 2.0,
+            "ea_params": {
+                "direction": "normal",
+                "startAt": 0.0,
+                "typ": "pressure",
+                "ea_intersection": "max"
+            }
+        }
+    },
+    "contact": {
+        "tol": 0.025,
+        "stiffness": 10000.0
+    },
+    "files": {
+        "folder": "dimless_tests/peri_control/peri_stiffness_1e+01/"
+    },
+    "solver": {
+        "quadrature_degree": 8
+    }
+}
+

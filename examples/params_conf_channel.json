@@ -1,0 +1,99 @@
+{
+    "time": {
+        "Ttot": 2.0,
+        "dt": 1e-05,
+        "print_each": 2000,
+        "print_each_report": 20
+    },
+    "cell": {
+        "mesh": {
+            "radius": 1.0,
+            "lc": 0.02,
+            "meshOrder": 2,
+            "function": "MakeCircle"
+        },
+        "material": {
+            "bendingTensionRatio": 1e-06,
+            "area_stiffness": 32.0,
+            "peri_stiffness": 10.0,
+            "peri_max_factor": 2.0
+        },
+        "pressure": {
+            "dynamics": "ExternalPressureGradient",
+            "class": "PressureGradient",
+            "class_kwargs": {
+                "gradient": 8.0,
+                "direction": [
+                    0.0,
+                    1.0
+                ]
+            }
+        },
+        "ecm": {
+            "dynamics": "ECMBarrierPolygonDynamics",
+            "ecm_params": {
+                "ecm_tol": 0.025
+            },
+            "ecm_make_func": "ECMPolygons",
+            "ecm_make_func_kwargs": {
+                "list_poly_coords": [
+                    [
+                        [
+                            0.15,
+                            1.5
+                        ],
+                        [
+                            2.15,
+                            -0.5
+                        ],
+                        [
+                            2.15,
+                            3.5
+                        ],
+                        [
+                            0.15,
+                            3.5
+                        ]
+                    ],
+                    [
+                        [
+                            -0.15,
+                            1.5
+                        ],
+                        [
+                            -2.15,
+                            -0.5
+                        ],
+                        [
+                            -2.15,
+                            3.5
+                        ],
+                        [
+                            -0.15,
+                            3.5
+                        ]
+                    ]
+                ]
+            }
+        }
+    },
+    "nucleus": {
+        "spring_stiffness": 10.0,
+        "material": {
+            "viscosityRatio": 1.0,
+            "tensionRatio": 0.1,
+            "bendingRatio": 0.1,
+            "peri_max_factor": 2.0
+        }
+    },
+    "contact": {
+        "tol": 0.025,
+        "stiffness": 10000.0
+    },
+    "files": {
+        "folder": "dimless_tests/confined_channel/cell_peri_2.00_nucl_peri_2.00_spring_stiffness_1e+01/"
+    },
+    "solver": {
+        "quadrature_degree": 8
+    }
+}

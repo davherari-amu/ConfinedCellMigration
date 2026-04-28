@@ -1,0 +1,55 @@
+{
+    "time": {
+        "Ttot": 2.0,
+        "dt": 0.0001,
+        "print_each": 200,
+        "print_each_report": 2
+    },
+    "cell": {
+        "mesh": {
+            "radius": 1.0,
+            "lc": 0.02,
+            "meshOrder": 2,
+            "function": "MakeCircle"
+        },
+        "material": {
+            "bendingTensionRatio": 1e-06,
+            "area_stiffness": 32.0,
+            "peri_stiffness": 10.0,
+            "peri_max_factor": 1.25
+        },
+        "protrusions": {
+            "dynamics": "RandomFilopodiaDynamics",
+            "force_class": "ea_Dotpro",
+            "prot_num": 1,
+            "prot_tim_min": 2.0,
+            "prot_mag_min": 8.0,
+            "prot_wid_min": 4.0,
+            "prot_theta_pi_min": 0.5,
+            "ea_params": {
+                "direction": "normal",
+                "startAt": 0.0,
+                "typ": "pressure",
+                "ea_intersection": "max"
+            }
+        }
+    },
+    "nucleus": {
+        "spring_stiffness": 10.0,
+        "material": {
+            "viscosityRatio": 1.0,
+            "tensionRatio": 0.1,
+            "bendingRatio": 0.1
+        }
+    },
+    "contact": {
+        "tol": 0.025,
+        "stiffness": 10000.0
+    },
+    "files": {
+        "folder": "dimless_tests/dir_nucl/spring_stiffness_1e+01/"
+    },
+    "solver": {
+        "quadrature_degree": 8
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "time": {
+        "Ttot": 2.0,
+        "dt": 0.0001,
+        "print_each": 200,
+        "print_each_report": 2
+    },
+    "cell": {
+        "mesh": {
+            "radius": 1.0,
+            "lc": 0.02,
+            "meshOrder": 2,
+            "function": "MakeSandClock"
+        },
+        "material": {
+            "bendingTensionRatio": 1e-06,
+            "area_stiffness": 32.0,
+            "peri_stiffness": 0.0
+        }
+    },
+    "contact": {
+        "tol": 0.025,
+        "stiffness": 10000.0
+    },
+    "files": {
+        "folder": "dimless_tests/mechanical_consistency/area_stiffness_32/"
+    },
+    "solver": {
+        "quadrature_degree": 8
+    }
+}

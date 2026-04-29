@@ -10,7 +10,7 @@ cd examples/
 python3 ../src/single_cell.py -i <params_file.json>
 ```
 
-For example, to run the mechanical consistency test from Section 3.1 of the paper:
+For example, to run the mechanical consistency test from paper:
 
 ```bash
 cd examples/
@@ -66,15 +66,15 @@ Each run produces:
 
 ## Examples in the paper
 
-The table below maps each example in `examples/` to the corresponding section and figure in the paper.
+The table below maps each example in `examples/` to the corresponding figure in the paper.
 
-| Parameter file | Section | Description |
-|---|---|---|
-| `params_mecha_cons.json` | 3.1 | Mechanical consistency: curve-shortening flow with and without osmotic pressure |
-| `params_peri_cont.json` | 3.2 | Effect of perimeter control on randomly migrating cell |
-| `params_migr_with_nucl.json` | 3.3 | Directed migration with nucleus, varying PM–NE elasticity |
-| `params_conf_disc.json` | 3.4 | Active migration through two-disc confinement |
-| `params_conf_channel.json` | 3.5 | Passive migration through a confining channel |
+| Parameter file | Description |
+|---|---|
+| `params_mecha_cons.json` | Mechanical consistency: curve-shortening flow with and without osmotic pressure |
+| `params_peri_cont.json` | Effect of perimeter control on randomly migrating cell |
+| `params_migr_with_nucl.json` | Directed migration with nucleus, varying PM–NE elasticity |
+| `params_conf_disc.json` | Active migration through two-disc confinement |
+| `params_conf_channel.json` | Passive migration through a confining channel |
 
 ---
 

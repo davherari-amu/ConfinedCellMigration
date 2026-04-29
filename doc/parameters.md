@@ -2,7 +2,7 @@
 
 All simulations are controlled by a JSON parameter file passed to `single_cell.py` with the `-i` flag. The file is organised into the following top-level blocks.
 
-For the mathematical definitions of each quantity, refer to the paper (Section 2 and Table 1–2).
+For the mathematical definitions of each quantity, refer to the paper.
 
 ---
 

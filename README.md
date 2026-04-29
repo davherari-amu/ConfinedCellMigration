@@ -104,3 +104,7 @@ coupling plasma membrane and nuclear envelope. Under review.
 David Hernandez-Aristizabal  
 Université Côte d'Azur, LJAD UMR CNRS 7351, Nice, France  
 david.hernandez-aristizabal@univ-cotedazur.fr
+ORCID: [0000-0003-4041-3785](https://orcid.org/0000-0003-4041-3785)
+
+## Acknowledgment
+This project has been supported by the Institut national de la santé et de la recherche médicale (INSERM) through project INSERM-MIC2024-LSP 296457, led by Rachele Allena and Frédéric Luton.

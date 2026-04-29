@@ -6,7 +6,7 @@ This code accompanies the manuscript:
 
 > **From free to confined cell migration: a geometric surface PDE framework coupling plasma membrane and nuclear envelope**  
 > David Hernandez-Aristizabal, Anotida Madzvamuse, Rachele Allena  
-> *Under review*, 2025
+> *Under review*, 2026
 
 ---
 

@@ -4,7 +4,7 @@ A geometric surface PDE framework for simulating cell migration, coupling the pl
 
 This code accompanies the manuscript:
 
-> **From free to confined cell migration: a geometric surface PDE framework coupling plasma membrane and nuclear envelope**  
+> **Membrane tension and cell–nucleus mechanical coupling regulate confined cell migration**  
 > David Hernandez-Aristizabal, Anotida Madzvamuse, Rachele Allena  
 > *Under review*, 2026
 
@@ -95,8 +95,7 @@ If you use this code, please cite the accompanying manuscript (reference to be u
 
 ```
 Hernandez-Aristizabal, D., Madzvamuse, A., Allena, R. (2026).
-From free to confined cell migration: a geometric surface PDE framework
-coupling plasma membrane and nuclear envelope. Under review.
+Membrane tension and cell–nucleus mechanical coupling regulate confined cell migration. Under review.
 ```
 
 ## Contact

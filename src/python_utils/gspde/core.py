@@ -84,6 +84,11 @@ class GSPDE(object):
         poly = Polygon(zip(xCoor, yCoor))
         return poly
     # }}}
+    # Get coords array {{{
+    def GetCoordsArray(self):
+        # Return boundary coordinates as a closed (numNods+1, 2) numpy array
+        return self.GetOrderedNodes()
+    # }}}
     # Get ordered nodes {{{
     def GetOrderedNodes(self):
         # Get nodes

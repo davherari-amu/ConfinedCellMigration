@@ -508,10 +508,16 @@ class MembraneNucleusDynamics(BasicDynamics):
         # List to report
         force_memb_nuen_form = form((gspde.memb_nuen_force)**2.0*gspde.dx)
         force_memb_nuen_spring_form = form((gspde.memb_nuen_spring)**2.0*gspde.dx)
-        gspde.report_names += ["force_memb_nuen", "force_memb_nuen_spring"]
+        force_memb_nuen_spring_net_x_form = form((gspde.memb_nuen_spring*gspde.normal[0])*gspde.dx)
+        force_memb_nuen_spring_net_y_form = form((gspde.memb_nuen_spring*gspde.normal[1])*gspde.dx)
+        gspde.force_memb_nuen_spring_net_x_form = force_memb_nuen_spring_net_x_form
+        gspde.force_memb_nuen_spring_net_y_form = force_memb_nuen_spring_net_y_form
+        gspde.report_names += ["force_memb_nuen", "force_memb_nuen_spring", "force_memb_nuen_spring_x", "force_memb_nuen_spring_y"]
         old_func = gspde.report_list_func
         gspde.report_list_func = lambda t : old_func(t) + [np.sqrt(assemble_scalar(force_memb_nuen_form)),
-                                                           np.sqrt(assemble_scalar(force_memb_nuen_spring_form))]
+                                                           np.sqrt(assemble_scalar(force_memb_nuen_spring_form)),
+                                                           assemble_scalar(force_memb_nuen_spring_net_x_form),
+                                                           assemble_scalar(force_memb_nuen_spring_net_y_form)]
         return
     # }}}
     # Add expressions {{{

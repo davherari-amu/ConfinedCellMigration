@@ -422,12 +422,24 @@ class ContactToECMPolygons(ContactToECM):
 # }}}
 
 # Spring force from surface to surface centroid {{{
+def _geometric_centroid(gspde):
+    # Geometric centroid computed directly from the polygon (bypasses centroid_function).
+    # Used by SpringForceCentroidToCentroid to get the true centroid of each surface.
+    coords = gspde.GetCoordsArray()
+    x0 = coords[:-1, 0]; y0 = coords[:-1, 1]
+    x1 = coords[1:,  0]; y1 = coords[1:,  1]
+    cross = x0*y1 - x1*y0
+    signed_area = 0.5*np.sum(cross)
+    cx = np.sum((x0 + x1)*cross)/(6.0*signed_area)
+    cy = np.sum((y0 + y1)*cross)/(6.0*signed_area)
+    return np.array([cx, cy])
+
 def SpringForceCentroidToCentroid(inner, outer):
-    poly_inner = inner.GetPolygon()
-    poly_outer = outer.GetPolygon()
-    # Get centres
-    inner_centre = np.array(centroid(poly_inner).coords[0])
-    outer_centre = np.array(centroid(poly_outer).coords[0])
+    # Compute true geometric centroids of each surface independently.
+    # We must NOT use the .centroid property here because memb.centroid_function
+    # is overridden to return nuen.centroid, which would make the distance zero.
+    inner_centre = _geometric_centroid(inner)
+    outer_centre = _geometric_centroid(outer)
     # outer_centre = ChebyshevCenter(poly_outer, tol = 1.0e-3)
     # Get distance vector
     distance = outer_centre - inner_centre
@@ -436,38 +448,35 @@ def SpringForceCentroidToCentroid(inner, outer):
     # Total force
     dis_mag = np.sqrt(distance[0]**2.0 + distance[1]**2.0)
     total_force = dis_mag*inner.spring_stiffness.value
-    # Interpolate functions
-    inner.dot_dis_nor.interpolate(inner.dot_dis_nor_expr)
-    outer.dot_dis_nor.interpolate(outer.dot_dis_nor_expr)
-    # # nucleus pushes and cell pulls, compute active regions
-    # inner.dot_dis_nor.x.array[inner.dot_dis_nor.x.array < 0.0] = 0.0
-    # outer.dot_dis_nor.x.array[outer.dot_dis_nor.x.array > 0.0] = 0.0
-    # Force proportional to projected distance
-    inner_centre_to_outer_nodes = outer.nodes - inner_centre
-    outer_projected_distance = np.dot(inner_centre_to_outer_nodes, distance/dis_mag)
-    outer.dot_dis_nor.x.array[:] *= outer_projected_distance[:]
-    # The nucleus pulls the part of the cell in front (in the direction of the distance vector) of the nucleus centre
-    outer_mask = outer_projected_distance < 0.0
-    outer.dot_dis_nor.x.array[outer_mask] = 0.0
-    # Force proportional to projected distance
+    # Initialisation and check
+    inner.memb_nuen_spring.x.array[:] = 0.0
+    outer.memb_nuen_spring.x.array[:] = 0.0
+    if dis_mag < 1.0e-6 or total_force < 1.0e-12:
+        return
+    # Compute the length on inner and outer {{{
     inner_centre_to_inner_nodes = inner.nodes - inner_centre
     inner_projected_distance = np.dot(inner_centre_to_inner_nodes, distance/dis_mag)
-    inner.dot_dis_nor.x.array[:] *= inner_projected_distance[:]
-    # The plasma membrane pulls the part of the nucleus in front of the nucleus centre
-    inner_mask = inner_projected_distance < 0.0
-    inner.dot_dis_nor.x.array[inner_mask] = 0.0
-
-    # Multiply the forces to ensure the total force
-    inner_dot_dis_nor = np.abs(assemble_scalar(inner.dot_dis_nor_form))
-    outer_dot_dis_nor = np.abs(assemble_scalar(outer.dot_dis_nor_form))
-    if dis_mag > 1.0e-6:
-        inner_multiplier = total_force/inner_dot_dis_nor
-        outer_multiplier = total_force/outer_dot_dis_nor
-    else:
-        inner_multiplier = 0.0
-        outer_multiplier = 0.0
-    inner.memb_nuen_spring.x.array[:] = inner_multiplier*inner.dot_dis_nor.x.array[:]
-    outer.memb_nuen_spring.x.array[:] = outer_multiplier*outer.dot_dis_nor.x.array[:]
+    inner_mask = inner_projected_distance > 0.0
+    inner_centre_to_outer_nodes = outer.nodes - inner_centre
+    outer_projected_distance = np.dot(inner_centre_to_outer_nodes, distance/dis_mag)
+    outer_mask = outer_projected_distance > 0.0
+    # }}}
+    # Compute the force {{{
+    inner.dot_dis_nor.interpolate(inner.dot_dis_nor_expr)
+    outer.dot_dis_nor.interpolate(outer.dot_dis_nor_expr)
+    inner.memb_nuen_spring.x.array[inner_mask] = total_force*inner.dot_dis_nor.x.array[inner_mask]
+    outer.memb_nuen_spring.x.array[outer_mask] = total_force*outer.dot_dis_nor.x.array[outer_mask]
+    inner_naive_force_x = assemble_scalar(inner.force_memb_nuen_spring_net_x_form)
+    inner_naive_force_y = assemble_scalar(inner.force_memb_nuen_spring_net_y_form)
+    inner_naive_force = np.sqrt(inner_naive_force_x**2.0 + inner_naive_force_y**2.0)
+    inner_M = inner_naive_force/total_force
+    outer_naive_force_x = assemble_scalar(outer.force_memb_nuen_spring_net_x_form)
+    outer_naive_force_y = assemble_scalar(outer.force_memb_nuen_spring_net_y_form)
+    outer_naive_force = np.sqrt(outer_naive_force_x**2.0 + outer_naive_force_y**2.0)
+    outer_M = outer_naive_force/total_force
+    inner.memb_nuen_spring.x.array[inner_mask] /= inner_M
+    outer.memb_nuen_spring.x.array[outer_mask] /= outer_M
+    # }}}
     return
 # }}}
 

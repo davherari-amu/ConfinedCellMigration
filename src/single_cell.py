@@ -233,6 +233,15 @@ def single_cell(params):
         nucl_params["bendingRatio"] = bendingRatio_nucl
         nucl_params["peri_max_factor"] = peri_max_factor_nucl
         # }}}
+        # Time {{{
+        if "spring_time" in paramsNucleus:
+            spring_time = np.array(paramsNucleus["spring_time"])
+            spring_time_func = lambda ti : np.interp(ti,
+                                                     spring_time[:, 0],
+                                                     spring_time[:, 1])*memb_nucl_spring_stiffness
+        else:
+            spring_time_func = lambda ti : memb_nucl_spring_stiffness
+        # }}}
     # }}}
     # Files {{{
     fileParams = params["files"]
@@ -332,6 +341,9 @@ def single_cell(params):
         k1 += 1
         # Solution
         t += dt
+        if "nucleus" in params:
+            cell.memb.spring_stiffness.value = spring_time_func(t)
+            cell.nuen.spring_stiffness.value = spring_time_func(t)
         cell.SolveIteration(t)
         # Write output results
         if k1%print_each_report == 0:

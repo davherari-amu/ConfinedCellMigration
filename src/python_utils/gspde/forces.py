@@ -6,7 +6,6 @@ from scipy.spatial import KDTree
 import numpy as np
 import shapely
 from shapely.geometry import Point
-from shapely import centroid
 
 from abc import ABC, abstractmethod
 import copy
@@ -71,6 +70,9 @@ class eaSumNodal(object):
     # __init__ {{{
     def __init__(self, **kwargs):
         self._N = kwargs["N"]
+        if self._N == 0:
+            raise ValueError("eaSumNodal: N=0, no protrusions defined. "
+                             "Check that Ttot is large enough relative to prot_tim.")
         hs = kwargs["hs"]
         Ts = kwargs["Ts"]
         t0s = kwargs["t0s"]

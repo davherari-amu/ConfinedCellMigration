@@ -2,7 +2,7 @@
     "time": {
         "Ttot": 2.0,
         "dt": 1e-05,
-        "print_each": 2000,
+        "print_each": 200,
         "print_each_report": 20
     },
     "cell": {
@@ -22,7 +22,7 @@
             "dynamics": "ExternalPressureGradient",
             "class": "PressureGradient",
             "class_kwargs": {
-                "gradient": 8.0,
+                "gradient": 16.0,
                 "direction": [
                     0.0,
                     1.0
@@ -78,7 +78,7 @@
         }
     },
     "nucleus": {
-        "spring_stiffness": 10.0,
+        "spring_stiffness": 0.0,
         "material": {
             "viscosityRatio": 1.0,
             "tensionRatio": 0.1,
@@ -91,7 +91,7 @@
         "stiffness": 10000.0
     },
     "files": {
-        "folder": "dimless_tests/confined_channel/cell_peri_2.00_nucl_peri_2.00_spring_stiffness_1e+01/"
+        "folder": "confined_channel/spring_stiffness_0e+00/"
     },
     "solver": {
         "quadrature_degree": 8

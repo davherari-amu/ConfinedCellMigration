@@ -40,7 +40,7 @@
         "stiffness": 10000.0
     },
     "files": {
-        "folder": "dimless_tests/peri_control/peri_stiffness_1e+01/"
+        "folder": "random_movement/peri_stiffness_1e+01/"
     },
     "solver": {
         "quadrature_degree": 8

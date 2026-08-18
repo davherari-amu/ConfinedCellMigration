@@ -2,6 +2,7 @@
 import os, sys
 
 from petsc4py import PETSc
+from dolfinx.fem import form
 
 from basix.ufl import element, mixed_element
 
@@ -51,6 +52,8 @@ def set_measures(gspde):
     gspde.dx = ufl.Measure("dx", domain = gspde.domain,
                           metadata = {"quadrature_degree" : quadrature_degree,
                                       "quadrature_rule" : "default"})
+    gspde.peri_form = form(Constant(gspde.domain, PETSc.ScalarType(1.0))*gspde.dx)
+    gspde.area_form = form(0.5*dot(gspde.x, gspde.n)*gspde.dx)
     return
 # }}}
 

@@ -1,9 +1,9 @@
 {
     "time": {
         "Ttot": 2.0,
-        "dt": 0.0001,
-        "print_each": 200,
-        "print_each_report": 2
+        "dt": 1e-05,
+        "print_each": 2000,
+        "print_each_report": 20
     },
     "cell": {
         "mesh": {
@@ -47,7 +47,7 @@
         "stiffness": 10000.0
     },
     "files": {
-        "folder": "dimless_tests/dir_nucl/spring_stiffness_1e+01/"
+        "folder": "dir_nucl/spring_stiffness_1.00e+01/"
     },
     "solver": {
         "quadrature_degree": 8

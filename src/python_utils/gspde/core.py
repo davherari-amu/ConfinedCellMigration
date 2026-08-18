@@ -1,10 +1,10 @@
 # Libraries {{{
 from mpi4py import MPI
+from dolfinx.fem import assemble_scalar
 
 import numpy as np
 
 from shapely.geometry import Polygon
-from shapely import centroid
 
 from pdb import set_trace
 
@@ -38,16 +38,25 @@ class GSPDE(object):
         return self.domain.geometry.x[:, :self.dimSpa]
     @property
     def area(self):
-        return self.GetPolygon().area
+        return abs(assemble_scalar(self.area_form))
     @property
     def perimeter(self):
-        return self.GetPolygon().length
+        return abs(assemble_scalar(self.peri_form))
     @property
     def centroid(self):
         if self.centroid_function is not None:
             return self.centroid_function()
-        else:
-            return np.array(centroid(self.GetPolygon()).coords[0])
+        # Polygon centroid from cross-product weighted coordinates
+        coords = self.GetCoordsArray()
+        x0 = coords[:-1, 0]
+        y0 = coords[:-1, 1]
+        x1 = coords[1:, 0]
+        y1 = coords[1:, 1]
+        cross = x0*y1 - x1*y0
+        signed_area  = 0.5*np.sum(cross)
+        cx = np.sum((x0 + x1)*cross)/(6.0*signed_area)
+        cy = np.sum((y0 + y1)*cross)/(6.0*signed_area)
+        return np.array([cx, cy])
     # }}}
     # __init__ {{{
     def __init__(self, kwargs):

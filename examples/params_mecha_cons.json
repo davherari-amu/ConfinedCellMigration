@@ -23,7 +23,7 @@
         "stiffness": 10000.0
     },
     "files": {
-        "folder": "dimless_tests/mechanical_consistency/area_stiffness_32/"
+        "folder": "mechanical_consistency/area_stiffness_32/"
     },
     "solver": {
         "quadrature_degree": 8

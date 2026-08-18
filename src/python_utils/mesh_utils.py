@@ -125,10 +125,9 @@ def OrderNodeList(startNode, endNode, nodes, numEles):
     return nodeList
 # }}}
 # Equidistribute mesh {{{
-def EquidistributeMesh(coords, bc_type = "periodic", inSamples = 100, optimal = True):
+def EquidistributeMesh(coords, bc_type = "periodic", optimal = True):
     # Cumulative length
-    spl_x, spl_y, cumSpline_length = ArcLengthSpline(coords, bc_type = bc_type,
-                                                     inSamples = inSamples)
+    spl_x, spl_y, cumSpline_length = ArcLengthSpline(coords, bc_type = bc_type)
     spline_length = cumSpline_length[-1]
     numPoints = len(cumSpline_length) - 1 # No repeated points
     para = np.arange(numPoints + 1) # Parameter
@@ -137,13 +136,15 @@ def EquidistributeMesh(coords, bc_type = "periodic", inSamples = 100, optimal = 
     if optimal:
         disLengths = (dumLengths - cumSpline_length)[:-1]
         delLength = -np.sum(disLengths)/numPoints
-        newLengths = dumLengths - delLength
+        newLengths = dumLengths + delLength
     else:
         newLengths = dumLengths
     # New positions
     interp_func = interp1d(cumSpline_length, para, kind = 'linear',
                            fill_value = "extrapolate")
-    newPara = interp_func(newLengths)
+    # Wrap the lengths inside the table and restore the whole turns afterwards
+    turns = np.floor(newLengths/spline_length)
+    newPara = interp_func(newLengths - turns*spline_length) + turns*numPoints
     new_x = spl_x(newPara)
     new_y = spl_y(newPara)
     # New coords
@@ -151,7 +152,7 @@ def EquidistributeMesh(coords, bc_type = "periodic", inSamples = 100, optimal = 
     return equiCoords
 # }}}
 # Compute arc length spline {{{
-def ArcLengthSpline(coords, bc_type = "periodic", inSamples = 1000):
+def ArcLengthSpline(coords, bc_type = "periodic"):
     # Get data to define parameterised spline
     x = coords[:, 0]
     y = coords[:, 1]
@@ -160,19 +161,27 @@ def ArcLengthSpline(coords, bc_type = "periodic", inSamples = 1000):
     # Define spline
     spl_x = make_interp_spline(para, x, bc_type = bc_type)
     spl_y = make_interp_spline(para, y, bc_type = bc_type)
-    # Segment length
-    para_segments = np.linspace(0, numPoints, inSamples*numPoints)
-    dpara = (numPoints)/(inSamples*numPoints)
-    dx = spl_x(para_segments, 1)
-    dy = spl_y(para_segments, 1)
-    step_length_point = np.sqrt(dx**2.0 + dy**2.0)*dpara
-    step_length_point_half_left = step_length_point/2.0
-    step_length_point_half_right = np.concatenate([step_length_point_half_left[1:],
-                                                   np.array([step_length_point_half_left[0]])])
-    step_length = step_length_point_half_left + step_length_point_half_right
-    cumSpline_length_fine = np.cumsum(step_length)
-    cumSpline_length = np.concatenate([np.zeros(1),
-                                       cumSpline_length_fine[(para*inSamples - 1)[1:]]])
+    # Compute cumulative arc length via 5-point Gauss-Legendre quadrature per segment.
+    # Each spline segment is a cubic polynomial, so GL is spectrally accurate with
+    # far fewer evaluations than the former inSamples trapezoidal approach.
+    gl_nodes, gl_weights = np.polynomial.legendre.leggauss(5)
+    # Remap GL nodes/weights from [-1, 1] to [0, 1]
+    gl_nodes_01   = 0.5*(gl_nodes  + 1.0)
+    gl_weights_01 = 0.5* gl_weights
+    # Evaluation parameters: 5 GL points inside each segment, all in one flat array
+    # Shape before flatten: (numPoints, 5), where row k holds the GL nodes in [k, k+1]
+    segments = np.arange(numPoints)
+    all_t = (segments[:, None] + gl_nodes_01[None, :]).ravel()
+    # Spline tangent vector (dx/dt, dy/dt) at every GL evaluation point
+    dx = spl_x(all_t, 1)
+    dy = spl_y(all_t, 1)
+    # Arc length element |dr/dt| at each GL point, reshaped to (numPoints, 5):
+    # row k contains the 5 integrand values for segment k
+    arc_element = np.sqrt(dx*dx + dy*dy).reshape(numPoints, 5)
+    # Arc length of each segment = dot product of integrand row with GL weights
+    seg_lengths = arc_element @ gl_weights_01
+    # Cumulative arc length at each node boundary (length numPoints+1, starts at 0)
+    cumSpline_length = np.concatenate([np.zeros(1), np.cumsum(seg_lengths)])
     return spl_x, spl_y, cumSpline_length
 
 # }}}

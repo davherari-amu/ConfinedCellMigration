@@ -59,7 +59,7 @@
             "viscosityRatio": 1.0,
             "tensionRatio": 0.1,
             "bendingRatio": 0.1,
-            "peri_max_factor": 1.25
+            "peri_max_factor": 1.0
         }
     },
     "contact": {
@@ -67,7 +67,7 @@
         "stiffness": 10000.0
     },
     "files": {
-        "folder": "dimless_tests/confined_disc/cell_peri_1.5_nucl_peri_1.25_spring_0e+00/"
+        "folder": "confined_disc/cell_peri_1.50_nucl_peri_1.00/"
     },
     "solver": {
         "quadrature_degree": 8

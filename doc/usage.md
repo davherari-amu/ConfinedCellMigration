@@ -75,6 +75,8 @@ The table below maps each example in `examples/` to the corresponding figure in 
 | `params_migr_with_nucl.json` | Directed migration with nucleus, varying PM–NE elasticity |
 | `params_conf_disc.json` | Active migration through two-disc confinement |
 | `params_conf_channel.json` | Passive migration through a confining channel |
+| `params_transient_release.json` | Channel crossing with a transient release of the PM–NE elasticity $S$ |
+| `params_delayed_reinforcement.json` | Channel crossing with a delayed reinforcement of the PM–NE elasticity $S$ |
 
 ---
 

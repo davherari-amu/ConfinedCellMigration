@@ -16,6 +16,11 @@ Controls the temporal discretisation.
 | `dt` | float | Time step |
 | `print_each` | int | Write VTK output every this many time steps |
 | `print_each_report` | int | Write CSV report every this many time steps |
+| `total_prints` | int | Alternative to `print_each`: total number of VTK outputs over the run |
+| `total_prints_report` | int | Alternative to `print_each_report`: total number of CSV rows over the run |
+
+`print_each` takes precedence over `total_prints`, and `print_each_report` over
+`total_prints_report`.
 
 ---
 
@@ -91,6 +96,7 @@ Include this block to add the nuclear envelope (NE). Omit it entirely for PM-onl
 | Key | Type | Description |
 |---|---|---|
 | `spring_stiffness` | float | $S$, dimensionless PM–NE elastic coupling stiffness |
+| `spring_time` | list | Optional. List of `[time, factor]` pairs prescribing a time-varying $S$; the factor multiplies `spring_stiffness` and is linearly interpolated between the given times |
 
 ### `nucleus.material`
 

@@ -5,17 +5,17 @@ from shapely import Polygon
 # }}}
 
 # ECM Points {{{
-def ECMPoints(nrows, ncols, length, y_start, shift_factor):
+def ECMPoints(nrows, ncols, x_length, y_length, y_start, shift_factor):
     ecm_points = np.empty((0, 2))
-    x_start = -length/2.0
-    delta_x = length/(ncols - 1)
-    delta_y = length/(nrows - 1)
+    x_start = -x_length/2.0
+    delta_x = x_length/(ncols - 1)
+    delta_y = y_length/(nrows - 1)
     shift = delta_x*shift_factor
     for i in range(nrows):
         for j in range(ncols):
             x = x_start + j*delta_x
             y = y_start + i*delta_y
-            if (i%2 == 0):
+            if (i%2 == 1):
                 x += shift
             ecm_points = np.vstack((ecm_points, np.array([x, y])))
     return ecm_points

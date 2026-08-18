@@ -37,7 +37,9 @@ ConfinedCellMigration/
 │   ├── params_peri_cont.json       # Perimeter control (Section 3.2)
 │   ├── params_migr_with_nucl.json  # Migration with nucleus (Section 3.3)
 │   ├── params_conf_disc.json       # Active migration through disc obstacles (Section 3.4)
-│   └── params_conf_channel.json    # Passive migration through a channel (Section 3.5)
+│   ├── params_conf_channel.json    # Passive migration through a channel (Section 3.5)
+│   ├── params_transient_release.json      # Channel crossing, transient release of S (Section 3.6)
+│   └── params_delayed_reinforcement.json  # Channel crossing, delayed reinforcement of S (Section 3.6)
 ├── src/
 │   ├── single_cell.py          # Main entry point
 │   └── python_utils/

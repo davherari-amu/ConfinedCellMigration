@@ -50,8 +50,20 @@ def single_cell(params):
     timeParams = params["time"]
     Ttot = timeParams["Ttot"]
     dt = timeParams["dt"]
-    print_each = timeParams["print_each"]
-    print_each_report = timeParams.get("print_each_report", 1)
+    numItes = int(Ttot/dt)
+    if "print_each" in timeParams:
+        print_each = timeParams["print_each"]
+    else:
+        total_prints = timeParams["total_prints"]
+        print_each = int(numItes/total_prints)
+    if "print_each_report" in timeParams:
+        print_each_report = timeParams["print_each_report"]
+    else:
+        if "total_prints_report" in timeParams:
+            total_prints_report = timeParams["total_prints_report"]
+            print_each_report = int(numItes/total_prints_report)
+        else:
+            print_each_report = 1
     # }}}
     # Cell {{{
     paramsCell = params["cell"]
@@ -356,7 +368,7 @@ def single_cell(params):
         printTime0 = printTime1
         mprint("------------------------------------", rank = rank)
         mprint("Increment: {} | CPU time: {}".format(k1, cpu_time), rank = rank)
-        mprint("dt: {} s | Simulation time {} of {}".format(round(dt, 4), round(t, 4), Ttot), rank = rank)
+        mprint("dt: {} s | Simulation time {} s of {} s".format(round(dt, 4), round(t, 4), Ttot), rank = rank)
         mprint("------------------------------------", rank = rank)
     # Close files
     cell.CloseResults()

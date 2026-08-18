@@ -102,8 +102,6 @@ class BasicDynamics(object):
         force_self_form = form((gspde.selfRepuForce)**2.0*gspde.dx)
         force_total_form = form((gspde.totalForce)**2.0*gspde.dx)
         grad_H_form = form(dot(gspde.grad_H, gspde.grad_H)*gspde.dx)
-        one = Constant(gspde.domain, PETSc.ScalarType(1.0))
-        area_form = form(one*gspde.dx)
         gspde.report_list_func = lambda t : [t,
                                              centroid(gspde.GetPolygon()).coords[0][0],
                                              centroid(gspde.GetPolygon()).coords[0][1],
@@ -113,7 +111,7 @@ class BasicDynamics(object):
                                              np.sqrt(assemble_scalar(memb_bending_form)),
                                              np.sqrt(assemble_scalar(force_self_form)),
                                              np.sqrt(assemble_scalar(force_total_form)),
-                                             np.sqrt(assemble_scalar(grad_H_form)/assemble_scalar(area_form)),
+                                             np.sqrt(assemble_scalar(grad_H_form)/gspde.perimeter),
                                              assemble_scalar(energy_form),
                                              assemble_scalar(bending_energy_form),
                                              ]

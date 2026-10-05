@@ -20,7 +20,7 @@ The model accounts for:
 - Perimeter-dependent membrane tension for surface area regulation
 - Active forces representing actin-driven protrusions
 - Elastic PM–NE coupling (LINC complex)
-- Passive pressure gradients
+- Passive external pressure
 - Repulsive contact forces (self-contact, PM–NE contact, contact with external obstacles)
 
 ## Repository structure
@@ -33,13 +33,13 @@ ConfinedCellMigration/
 │   ├── parameters.md
 │   └── code_structure.md
 ├── examples/                   # Parameter files for each simulation in the paper
-│   ├── params_mecha_cons.json      # Mechanical consistency (Section 3.1)
-│   ├── params_peri_cont.json       # Perimeter control (Section 3.2)
-│   ├── params_migr_with_nucl.json  # Migration with nucleus (Section 3.3)
-│   ├── params_conf_disc.json       # Active migration through disc obstacles (Section 3.4)
-│   ├── params_conf_channel.json    # Passive migration through a channel (Section 3.5)
-│   ├── params_transient_release.json      # Channel crossing, transient release of S (Section 3.6)
-│   └── params_delayed_reinforcement.json  # Channel crossing, delayed reinforcement of S (Section 3.6)
+│   ├── params_mecha_cons.json      # Mechanical consistency (Fig 4)
+│   ├── params_peri_cont.json       # Perimeter control (Fig 5)
+│   ├── params_migr_with_nucl.json  # Migration with nucleus (Fig 6)
+│   ├── params_conf_disc.json       # Active migration through disc obstacles (Figs 7 and 8)
+│   ├── params_conf_channel.json    # Passive migration through a channel (Fig 9)
+│   ├── params_transient_release.json      # Channel crossing, transient release of S (Fig 10)
+│   └── params_delayed_reinforcement.json  # Channel crossing, delayed reinforcement of S (Fig 10)
 ├── src/
 │   ├── single_cell.py          # Main entry point
 │   └── python_utils/
@@ -48,6 +48,7 @@ ConfinedCellMigration/
 │       ├── misc_utils.py
 │       └── output_utils.py
 ├── package-fenics-env.txt      # Exact conda environment snapshot
+├── CITATION.cff                # Citation metadata (read by GitHub and Zenodo)
 └── LICENSE
 ```
 
